@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <security-config>
     <parameters>
         <init-param>
@@ -17,19 +18,12 @@
             <param-value>seraph.confluence</param-value>
         </init-param>
 
-        {% if atl_autologin_cookie_age is defined %}
-          <init-param>
-              <param-name>autologin.cookie.age</param-name>
-              <param-value>{{ atl_autologin_cookie_age }}</param-value>
-          </init-param>
-        {% endif %}
-
         <!--only basic authentication available-->
         <init-param>
             <param-name>authentication.type</param-name>
             <param-value>os_authType</param-value>
         </init-param>
-
+        
         <!-- Invalidate session on login to prevent session fixation attack -->
          <init-param>
             <param-name>invalidate.session.on.login</param-name>
@@ -47,12 +41,16 @@
     <controller class="com.atlassian.confluence.setup.seraph.ConfluenceSecurityController"/>
 
     <!-- Default Confluence authenticator, which uses the configured user management for authentication. -->
+    {% if CROWD_SSO_ENABLED is not defined or CROWD_SSO_ENABLED == 'false' %}
     <authenticator class="com.atlassian.confluence.user.ConfluenceAuthenticator"/>
+    {% endif %}
 
     <!-- Custom authenticators appear below. To enable one of them, comment out the default authenticator above and uncomment the one below. -->
 
     <!-- Authenticator with support for Crowd single-sign on (SSO). -->
-    <!-- <authenticator class="com.atlassian.confluence.user.ConfluenceCrowdSSOAuthenticator"/> -->
+    {% if CROWD_SSO_ENABLED is defined and CROWD_SSO_ENABLED == 'true' %}
+    <authenticator class="com.atlassian.confluence.user.ConfluenceCrowdSSOAuthenticator"/>
+    {% endif %}
 
     <!-- Specialised version of the default authenticator which adds authenticated users to confluence-users if they aren't already a member. -->
     <!-- <authenticator class="com.atlassian.confluence.user.ConfluenceGroupJoiningAuthenticator"/> -->

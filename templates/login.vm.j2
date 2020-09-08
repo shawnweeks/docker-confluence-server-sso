@@ -10,8 +10,8 @@
 <html>
 	<head>{% endraw %}
       <script type="text/javascript">
-        var ssoUrl = '{{ sso_url | default('') | replace("'", "\\'") }}';
-        var contextPath = '{{ atl_tomcat_contextpath | default('') | replace("'", "\\'") }}';
+        var ssoUrl = '{{ CUSTOM_SSO_LOGIN_URL | default('') | replace("'", "\\'") }}';
+        var contextPath = '{{ ATL_TOMCAT_CONTEXTPATH | default('') | replace("'", "\\'") }}';
 
         var url = new URL(window.location.href);
         var logout = url.searchParams.get("logout");

@@ -1,1 +1,0 @@
-docker build -t confluence-server-sso --build-arg CONFLUENCE_VERSION=7.5.0 .

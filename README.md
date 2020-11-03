@@ -1,14 +1,15 @@
 ### Build Command
 ```shell
 docker build \
-    -t registry.cloudbrocktec.com/atlassian-suite/docker-confluence-server-sso:7.7.3 \
+    -t $REGISTRY/atlassian-suite/confluence-server-sso:7.7.3.$(date +"%Y%m%d%H%M%S") \
+    --build-arg BASE_REGISTRY=$REGISTRY \
     --build-arg CONFLUENCE_VERSION=7.7.3 \
     .
 ```
 
 ### Push to Registry
 ```shell
-docker push registry.cloudbrocktec.com/atlassian-suite/docker-confluence-server-sso
+docker push $REGISTRY/atlassian-suite/confluence-server-sso
 ```
 
 ### Simple Run Command
@@ -17,7 +18,7 @@ docker run --init -it --rm \
     --name confluence  \
     -v confluence-data:/var/atlassian/application-data/confluence \
     -p 8090:8090 \
-    registry.cloudbrocktec.com/atlassian-suite/docker-confluence-server-sso:7.7.3
+    $REGISTRY/atlassian-suite/confluence-server-sso:7.7.3.20201103170932
 ```
 
 ### SSO Run Command
@@ -32,7 +33,7 @@ docker run --init -it --rm \
     -e ATL_TOMCAT_SECURE='true' \
     -e ATL_PROXY_NAME='cloudbrocktec.com' \
     -e ATL_PROXY_PORT='443' \
-    registry.cloudbrocktec.com/atlassian-suite/docker-confluence-server-sso:7.7.3
+    $REGISTRY/atlassian-suite/confluence-server-sso:7.7.3
 
 # Run second after you've setup the crowd connection
 docker run --init -it --rm \
@@ -49,7 +50,7 @@ docker run --init -it --rm \
     -e CROWD_APP_NAME='confluence' \
     -e CROWD_APP_PASS='confluence' \
     -e CROWD_BASE_URL='https://cloudbrocktec.com/crowd' \
-    registry.cloudbrocktec.com/atlassian-suite/docker-confluence-server-sso:7.7.3
+    $REGISTRY/atlassian-suite/confluence-server-sso:7.7.3
 ```
 
 ### Environment Variables

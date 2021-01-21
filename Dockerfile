@@ -7,8 +7,8 @@
 # Crowd         2004
 # Bamboo        2005
 ARG BASE_REGISTRY
-ARG BASE_IMAGE=redhat/ubi/ubi7
-ARG BASE_TAG=7.9
+ARG BASE_IMAGE=redhat/ubi/ubi8
+ARG BASE_TAG=8.3
 
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG} as build
 
@@ -22,10 +22,6 @@ RUN mkdir -p /tmp/confluence_package && \
 
 
 ###############################################################################
-ARG BASE_REGISTRY
-ARG BASE_IMAGE=redhat/ubi/ubi7
-ARG BASE_TAG=7.9
-
 FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 
 ENV CONFLUENCE_USER confluence
@@ -42,8 +38,7 @@ RUN yum install -y java-11-openjdk-devel procps git python2 python2-jinja2 && \
     mkdir -p ${CONFLUENCE_INSTALL_DIR} && \    
     groupadd -r -g ${CONFLUENCE_GID} ${CONFLUENCE_GROUP} && \
     useradd -r -u ${CONFLUENCE_UID} -g ${CONFLUENCE_GROUP} -M -d ${CONFLUENCE_HOME} ${CONFLUENCE_USER} && \
-    chown -R "${CONFLUENCE_USER}:${CONFLUENCE_GROUP}" "${CONFLUENCE_INSTALL_DIR}" && \
-    chown -R "${CONFLUENCE_USER}:${CONFLUENCE_GROUP}" "${CONFLUENCE_HOME}"
+    chown -R ${CONFLUENCE_USER}:${CONFLUENCE_GROUP} ${CONFLUENCE_HOME}
 
 COPY [ "templates/*.j2", "/opt/jinja-templates/" ]
 COPY --from=build --chown=${CONFLUENCE_USER}:${CONFLUENCE_GROUP} [ "/tmp/confluence_package", "${CONFLUENCE_INSTALL_DIR}/" ]

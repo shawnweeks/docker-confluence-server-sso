@@ -1,9 +1,16 @@
+### Download
+```shell
+export CONFLUENCE_VERSION=7.7.3
+wget https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-${CONFLUENCE_VERSION}.tar.gz
+```
+
 ### Build Command
 ```shell
+export CONFLUENCE_VERSION=7.7.3
 docker build \
-    -t $REGISTRY/atlassian-suite/confluence-server-sso:7.7.3.$(date +"%Y%m%d%H%M%S") \
-    --build-arg BASE_REGISTRY=$REGISTRY \
-    --build-arg CONFLUENCE_VERSION=7.7.3 \
+    -t ${REGISTRY}/atlassian-suite/confluence-server-sso:${CONFLUENCE_VERSION} \
+    --build-arg BASE_REGISTRY=${REGISTRY} \
+    --build-arg CONFLUENCE_VERSION=${CONFLUENCE_VERSION}\
     .
 ```
 
@@ -14,11 +21,12 @@ docker push $REGISTRY/atlassian-suite/confluence-server-sso
 
 ### Simple Run Command
 ```shell
+export CONFLUENCE_VERSION=7.7.3
 docker run --init -it --rm \
     --name confluence  \
     -v confluence-data:/var/atlassian/application-data/confluence \
     -p 8090:8090 \
-    $REGISTRY/atlassian-suite/confluence-server-sso:7.7.3.20201103170932
+    $REGISTRY/atlassian-suite/confluence-server-sso:${CONFLUENCE_VERSION}
 ```
 
 ### SSO Run Command

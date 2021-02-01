@@ -8,10 +8,17 @@
          If using a http/https proxy, comment out this connector.
          ==============================================================================================================
         -->
-        <Connector port="{{ ATL_TOMCAT_PORT | default('8090') }}"
+        <Connector port="{{ ATL_TOMCAT_PORT | default('8090') }}"                   
                    
-                   proxyName="{{ ATL_PROXY_NAME | default('') }}"
-                   proxyPort="{{ ATL_PROXY_PORT | default('') }}"
+                   SSLEnabled="{{ ATL_TOMCAT_SSL_ENABLED | default('false') }}"
+                   sslEnabledProtocols="{{ ATL_TOMCAT_SSL_ENABLED_PROTOCOLS | default ('TLSv1.2,TLSv1.3') }}"
+                   keyAlias="{{ ATL_TOMCAT_KEY_ALIAS | default('') }}"
+                   keystoreFile="{{ ATL_TOMCAT_KEYSTORE_FILE | default('') }}"
+                   keystorePass="{{ ATL_TOMCAT_KEYSTORE_PASS | default('') }}"
+                   keystoreType="{{ ATL_TOMCAT_KEYSTORE_TYPE| default('JKS') }}"                   
+
+                   proxyName="{{ ATL_TOMCAT_PROXY_NAME | default('') }}"
+                   proxyPort="{{ ATL_TOMCAT_PROXY_PORT | default('') }}"
                    scheme="{{ ATL_TOMCAT_SCHEME | default('http') }}"
                    secure="{{ ATL_TOMCAT_SECURE | default('false') }}"
                    

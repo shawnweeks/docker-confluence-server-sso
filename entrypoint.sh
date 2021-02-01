@@ -3,20 +3,23 @@
 set -e
 umask 0027
 
-: ${JAVA_OPTS:=}
-: ${CATALINA_OPTS:=}
-
-export JAVA_OPTS="${JAVA_OPTS}"
-export CATALINA_OPTS="${CATALINA_OPTS}"
-
-shutdownCleanup() {
-    if [[ -f ${CONFLUENCE_HOME}/lock ]]
-    then
-        echo "Cleaning Up Confluence Locks"
-        rm ${CONFLUENCE_HOME}/lock
-    fi
-}
+export JVM_SUPPORT_RECOMMENDED_ARGS=${ATL_JAVA_ARGS}
+export JVM_MINIMUM_MEMORY=${ATL_MIN_MEMORY}
+export JVM_MAXIMUM_MEMORY=${ATL_MAX_MEMORY}
 
 entrypoint.py
-trap "shutdownCleanup" INT
-${CONFLUENCE_INSTALL_DIR}/bin/start-confluence.sh -fg
+
+unset "${!ATL_@}"
+
+set +e
+flock -x -w 30 ${HOME}/.flock ${CONFLUENCE_INSTALL_DIR}/bin/start-confluence.sh -fg &
+CONFLUENCE_PID="$!"
+
+echo "Confluence Started with PID ${CONFLUENCE_PID}"
+wait ${CONFLUENCE_PID}
+
+if [[ $? -eq 1 ]]
+then
+    echo "Confluence Failed to Aquire Lock! Exiting"
+    exit 1
+fi

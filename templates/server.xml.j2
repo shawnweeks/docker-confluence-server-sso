@@ -14,7 +14,7 @@
                    sslEnabledProtocols="{{ ATL_TOMCAT_SSL_ENABLED_PROTOCOLS | default ('TLSv1.2,TLSv1.3') }}"
                    keyAlias="{{ ATL_TOMCAT_KEY_ALIAS | default('') }}"
                    keystoreFile="{{ ATL_TOMCAT_KEYSTORE_FILE | default('') }}"
-                   keystorePass="{{ ATL_TOMCAT_KEYSTORE_PASS | default('') }}"
+                   keystorePass="{{ ATL_TOMCAT_KEYSTORE_PASSWORD | default('') }}"
                    keystoreType="{{ ATL_TOMCAT_KEYSTORE_TYPE| default('JKS') }}"                   
 
                    proxyName="{{ ATL_TOMCAT_PROXY_NAME | default('') }}"

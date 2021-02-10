@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Server port="8000" shutdown="SHUTDOWN" debug="0">
+<Server port="-1" shutdown="SHUTDOWN" >
     <Service name="Tomcat-Standalone">
         <!--
          ==============================================================================================================
@@ -11,7 +11,7 @@
         <Connector port="{{ ATL_TOMCAT_PORT | default('8090') }}"                   
                    
                    SSLEnabled="{{ ATL_TOMCAT_SSL_ENABLED | default('false') }}"
-                   sslEnabledProtocols="{{ ATL_TOMCAT_SSL_ENABLED_PROTOCOLS | default ('TLSv1.2,TLSv1.3') }}"
+                   sslEnabledProtocols="{{ ATL_TOMCAT_SSL_ENABLED_PROTOCOLS | default ('TLSv1.2') }}"
                    keyAlias="{{ ATL_TOMCAT_KEY_ALIAS | default('') }}"
                    keystoreFile="{{ ATL_TOMCAT_KEYSTORE_FILE | default('') }}"
                    keystorePass="{{ ATL_TOMCAT_KEYSTORE_PASSWORD | default('') }}"
@@ -25,12 +25,13 @@
                    connectionTimeout="20000"
                    redirectPort="8443"
                    maxThreads="48"
+                   maxConnections="{{ ATL_TOMCAT_MAX_CONNECTIONS | default('8192') }}"
                    minSpareThreads="10"
                    enableLookups="false"
                    acceptCount="10"
-                   debug="0"
+                   
                    URIEncoding="UTF-8"
-                   protocol="org.apache.coyote.http11.Http11NioProtocol"/>
+                   protocol="HTTP/1.1"/>
         <!--
          ==============================================================================================================
          HTTP - Proxying Confluence via Apache or Nginx over HTTP
@@ -48,7 +49,7 @@
         <!--
         <Connector port="8090" connectionTimeout="20000" redirectPort="8443"
                    maxThreads="48" minSpareThreads="10"
-                   enableLookups="false" acceptCount="10" debug="0" URIEncoding="UTF-8"
+                   enableLookups="false" acceptCount="10" URIEncoding="UTF-8"
                    protocol="org.apache.coyote.http11.Http11NioProtocol"
                    scheme="http" proxyName="<subdomain>.<domain>.com" proxyPort="80"/>
         -->
@@ -87,23 +88,32 @@
         <!--
         <Connector port="8090" connectionTimeout="20000" redirectPort="8443"
                    maxThreads="48" minSpareThreads="10"
-                   enableLookups="false" acceptCount="10" debug="0" URIEncoding="UTF-8"
+                   enableLookups="false" acceptCount="10" URIEncoding="UTF-8"
                    protocol="org.apache.coyote.http11.Http11NioProtocol"
                    scheme="https" secure="true" proxyName="<subdomain>.<domain>.com" proxyPort="443"/>
         -->
 
-        <Engine name="Standalone" defaultHost="localhost" debug="0">
-            <Host name="localhost" debug="0" appBase="webapps" unpackWARs="true" autoDeploy="false" startStopThreads="4">
-                <Context path="{{ ATL_TOMCAT_CONTEXTPATH | default('') }}" docBase="../confluence" debug="0" reloadable="false" useHttpOnly="true">
+        <Engine name="Standalone" defaultHost="localhost" >
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false" startStopThreads="4">
+                <Context path="{{ ATL_TOMCAT_CONTEXTPATH | default('') }}" docBase="../confluence" reloadable="false" useHttpOnly="true">
                     <!-- Logging configuration for Confluence is specified in confluence/WEB-INF/classes/log4j.properties -->
                     <Manager pathname=""/>
                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60"/>
                 </Context>
 
-                <Context path="${confluence.context.path}/synchrony-proxy" docBase="../synchrony-proxy" debug="0"
+                <Context path="${confluence.context.path}/synchrony-proxy" docBase="../synchrony-proxy" 
                          reloadable="false" useHttpOnly="true">
                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60"/>
                 </Context>
+                
+                <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
+                <Valve className="org.apache.catalina.valves.RemoteIpValve" />
+                <Valve className="org.apache.catalina.valves.AccessLogValve"
+                            directory="{{ HOME }}/logs"
+                            prefix="access" suffix=".log"
+                            pattern="%h %l %u %t &quot;%r&quot; %s %b"
+                            requestAttributesEnabled="true" 
+                            renameOnRotate="true" />
             </Host>
         </Engine>
     </Service>

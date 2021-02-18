@@ -11,7 +11,7 @@ entrypoint.py
 
 if [[ -n ${ATL_TOMCAT_PROXY_NAME} ]]
 then
-    export CATALINA_OPTS='-Dynchrony.proxy.enabled=true'
+    export CATALINA_OPTS='-Dsynchrony.proxy.enabled=true'
 fi
 
 unset "${!ATL_@}"

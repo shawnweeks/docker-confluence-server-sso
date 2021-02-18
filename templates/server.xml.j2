@@ -101,7 +101,7 @@
                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60"/>
                 </Context>
 
-                <Context path="${confluence.context.path}/synchrony-proxy" docBase="../synchrony-proxy" 
+                <Context path="{{ ATL_TOMCAT_CONTEXTPATH | default('') }}/synchrony-proxy" docBase="../synchrony-proxy" 
                          reloadable="false" useHttpOnly="true">
                     <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60"/>
                 </Context>

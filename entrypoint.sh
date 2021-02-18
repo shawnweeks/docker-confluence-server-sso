@@ -9,11 +9,6 @@ export JVM_MAXIMUM_MEMORY=${ATL_MAX_MEMORY}
 
 entrypoint.py
 
-if [[ -x $ATL_TOMCAT_CONTEXTPATH ]]
-then
-    export CATALINA_OPTS="-Dconfluence.context.path=${ATL_TOMCAT_CONTEXTPATH}"
-fi
-
 unset "${!ATL_@}"
 
 set +e

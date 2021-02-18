@@ -32,7 +32,7 @@ ENV CONFLUENCE_GID 2002
 ENV CONFLUENCE_HOME /var/atlassian/application-data/confluence
 ENV CONFLUENCE_INSTALL_DIR /opt/atlassian/confluence
 
-RUN yum install -y java-11-openjdk-devel procps git python2 python2-jinja2 && \
+RUN yum install -y java-11-openjdk-devel procps git && \
     yum clean all && \    
     mkdir -p ${CONFLUENCE_HOME} && \    
     mkdir -p ${CONFLUENCE_INSTALL_DIR} && \    

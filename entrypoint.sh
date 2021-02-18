@@ -9,6 +9,11 @@ export JVM_MAXIMUM_MEMORY=${ATL_MAX_MEMORY}
 
 entrypoint.py
 
+if [[ -n ${ATL_TOMCAT_PROXY_NAME} ]]
+then
+    export CATALINA_OPTS='-Dynchrony.proxy.enabled=true'
+fi
+
 unset "${!ATL_@}"
 
 set +e

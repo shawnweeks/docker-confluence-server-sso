@@ -109,11 +109,10 @@
                 <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
                 <Valve className="org.apache.catalina.valves.RemoteIpValve" />
                 <Valve className="org.apache.catalina.valves.AccessLogValve"
-                            directory="{{ HOME }}/logs"
+                            directory="logs"
                             prefix="access" suffix=".log"
                             pattern="%h %l %u %t &quot;%r&quot; %s %b"
-                            requestAttributesEnabled="true" 
-                            renameOnRotate="true" />
+                            requestAttributesEnabled="true" />
             </Host>
         </Engine>
     </Service>
